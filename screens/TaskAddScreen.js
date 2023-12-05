@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
     },
 })
 
-const TaskAddScreen = ({ navigation }) => {
+const TaskAddScreen = ({ route, navigation }) => {
+    const { onAddTask, tasks } = route.params
     const [taskTitle, setTaskTitle] = useState('')
 
-    const addTaskFunction = addTask === 'ADD_TASK_FUNCTION' ? handleAddTask : null
-
-    const addTask = () => {
-        // TODO: Add task function.
-        
+    const handleAddTask = () => {
+        const newTask = { id: tasks.length + 1, title: taskTitle}
+        onAddTask(newTask)
+        navigation.goBack()
     }
 
     return (
@@ -39,7 +39,7 @@ const TaskAddScreen = ({ navigation }) => {
                 value={taskTitle}
                 onChangeText={(text) => setTaskTitle(text)}
             />
-            <Button title="Submit" onPress={addTask} />
+            <Button title="Submit" onPress={handleAddTask} />
         </SafeAreaView>
     )
 }

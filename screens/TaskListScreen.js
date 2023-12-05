@@ -1,7 +1,11 @@
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import TaskList from "../components/TaskList";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const styles = StyleSheet.create({
     container: {
@@ -32,15 +36,14 @@ const styles = StyleSheet.create({
     },
 })
 
-const TaskListScreen = () => {
-    const navigation = useNavigation();
-    const tasks = [
+const TaskListScreen = ({ navigation }) => {
+    const [tasks, setTasks] = useState([
         { id: 1, title: 'Learn React Native' },
         { id: 2, title: 'Develop an app with React Native' },
-    ]
+    ])
 
     const handleAddTask = (newTask) => {
-        // TODO: implement this function.
+        setTasks((prevTasks) => [...prevTasks, newTask])
     }
 
     return (
@@ -48,9 +51,9 @@ const TaskListScreen = () => {
             <TaskList tasks={tasks} />
             <TouchableOpacity 
                 style={styles.addButton}
-                onPress={() =>
-                    navigation.navigate('Add Task', { onAddTask: 'ADD_TASK_FUNCTION' })
-                }
+                onPress={() => {
+                    navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                }}
             >
                 <Text style={styles.addButtonText}>+</Text>
             </TouchableOpacity>
