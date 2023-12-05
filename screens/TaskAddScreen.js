@@ -1,26 +1,6 @@
 import React, { useState } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, TextInput } from "react-native";
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray', 
-        borderWidth: 1,
-        marginBottom: 16,
-        paddingHorizontal: 8,
-    },
-})
-
 const TaskAddScreen = ({ route, navigation }) => {
     const { onAddTask, tasks } = route.params
     const [taskTitle, setTaskTitle] = useState('')
@@ -43,5 +23,25 @@ const TaskAddScreen = ({ route, navigation }) => {
         </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: '#fff',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray', 
+        borderWidth: 1,
+        marginBottom: 16,
+        paddingHorizontal: 8,
+    },
+})
 
 export default TaskAddScreen;

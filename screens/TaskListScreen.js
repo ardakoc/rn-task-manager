@@ -7,6 +7,35 @@ LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
+const TaskListScreen = ({ navigation }) => {
+    const [tasks, setTasks] = useState([
+        { id: 1, title: 'Learn React Native' },
+        { id: 2, title: 'Develop an app with React Native' },
+    ])
+
+    const handleAddTask = (newTask) => {
+        setTasks((prevTasks) => [...prevTasks, newTask])
+    }
+
+    const handleDeleteTask = (taskId) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
+    }
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} />
+            <TouchableOpacity 
+                style={styles.addButton}
+                onPress={() => {
+                    navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                }}
+            >
+                <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+        </SafeAreaView>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -35,30 +64,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 })
-
-const TaskListScreen = ({ navigation }) => {
-    const [tasks, setTasks] = useState([
-        { id: 1, title: 'Learn React Native' },
-        { id: 2, title: 'Develop an app with React Native' },
-    ])
-
-    const handleAddTask = (newTask) => {
-        setTasks((prevTasks) => [...prevTasks, newTask])
-    }
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <TaskList tasks={tasks} />
-            <TouchableOpacity 
-                style={styles.addButton}
-                onPress={() => {
-                    navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
-                }}
-            >
-                <Text style={styles.addButtonText}>+</Text>
-            </TouchableOpacity>
-        </SafeAreaView>
-    )
-}  
 
 export default TaskListScreen;
