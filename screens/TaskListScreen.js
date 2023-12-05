@@ -49,7 +49,7 @@ const TaskListScreen = () => {
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() =>
-                    navigation.navigate('Add Task', { onAddTask: handleAddTask })
+                    navigation.navigate('Add Task', { onAddTask: 'ADD_TASK_FUNCTION' })
                 }
             >
                 <Text style={styles.addButtonText}>+</Text>
