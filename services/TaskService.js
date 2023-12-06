@@ -7,6 +7,17 @@ export const getTasks = async () => {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getTask = async (taskId) => {
+    const doc = await tasksCollection.doc(taskId).get();
+    if (doc.exists) {
+        return { id: doc.id, ...doc.data() };
+    }
+    else {
+        console.log('No such document!');
+        return null;
+    }
+};
+
 export const addTask = async (task) => {
     const docRef = await tasksCollection.add(task);
     return { id: docRef.id, ...task };
