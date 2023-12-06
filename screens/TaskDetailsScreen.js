@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { getTask, updateTask } from "../services/TaskService";
 
 const TaskDetailsScreen = ({ route, navigation }) => {
@@ -47,7 +47,9 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                             onChangeText={(text) => setEditedTask({ ...editedTask, details: text })}
                         />
                     </View>
-                    <Button title="Save Changes" onPress={handleSaveChanges} />
+                    <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
+                        <Text style={styles.buttonText}>Update Task</Text>
+                    </TouchableOpacity>
                 </>
             )}
         </SafeAreaView>
@@ -79,6 +81,19 @@ const styles = StyleSheet.create({
         color: '#777',
         borderWidth: 1,
         paddingHorizontal: 16,
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#000',
+        borderRadius: 12,
+        marginTop: 40,
+        marginHorizontal: 136,
+        padding: 16,
+    },
+    buttonText: {
+        fontSize: 16,
+        color: '#fff',
     },
 })
 

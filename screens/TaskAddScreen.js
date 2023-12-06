@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const TaskAddScreen = ({ route, navigation }) => {
-    const { onAddTask, tasks } = route.params
+    const { onAddTask } = route.params
     const [taskTitle, setTaskTitle] = useState('')
     const [taskDetails, setTaskDetails] = useState('')
     const [taskCompleted, setTaskCompleted] = useState(false)
@@ -33,7 +33,9 @@ const TaskAddScreen = ({ route, navigation }) => {
                     onChangeText={(text) => setTaskDetails(text)}
                 />
             </View>
-            <Button title="Submit" onPress={handleAddTask} />
+            <TouchableOpacity style={styles.button} onPress={handleAddTask}>
+                <Text style={styles.buttonText}>Add Task</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
@@ -58,6 +60,19 @@ const styles = StyleSheet.create({
         color: '#777',
         borderWidth: 1,
         paddingHorizontal: 16,
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#000',
+        borderRadius: 12,
+        marginTop: 40,
+        marginHorizontal: 136,
+        padding: 16,
+    },
+    buttonText: {
+        fontSize: 16,
+        color: '#fff',
     },
 })
 
