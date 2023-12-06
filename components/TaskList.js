@@ -8,9 +8,11 @@ const TaskList = ({ tasks, onDeleteTask, onToggleTask, onTaskDetails }) => {
             keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
             renderItem={({ item }) => (
                 <View style={styles.taskItem}>
-                    <TouchableOpacity onPress={() => onToggleTask(item.id)}>
-                        <Text style={item.completed ? styles.completedText : null}>{item.title}</Text>
-                    </TouchableOpacity>
+                    <View style={styles.taskItemTitle}>
+                        <TouchableOpacity onPress={() => onToggleTask(item.id)}>
+                            <Text style={item.completed ? styles.completedText : null}>{item.title}</Text>
+                        </TouchableOpacity>
+                    </View>
                     <TouchableOpacity onPress={() => onTaskDetails(item.id)}>
                         <Text style={styles.detailsButtonText}>Details</Text>
                     </TouchableOpacity>
@@ -31,6 +33,9 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
+    },
+    taskItemTitle: {
+        width: '60%',
     },
     deleteButtonText: {
         flex: 1,
