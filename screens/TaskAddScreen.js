@@ -5,9 +5,10 @@ const TaskAddScreen = ({ route, navigation }) => {
     const { onAddTask, tasks } = route.params
     const [taskTitle, setTaskTitle] = useState('')
     const [taskDetails, setTaskDetails] = useState('')
+    const [taskCompleted, setTaskCompleted] = useState(false)
 
     const handleAddTask = () => {
-        const newTask = { title: taskTitle, details: taskDetails }
+        const newTask = { title: taskTitle, details: taskDetails, completed: taskCompleted }
         onAddTask(newTask)
         navigation.goBack()
     }
