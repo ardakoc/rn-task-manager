@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
-import { addTask, deleteTask, getTasks, getTask } from "../services/TaskService";
+import { addTask, deleteTask, getTasks, completeTask } from "../services/TaskService";
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
