@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
 import { addTask, deleteTask, getTasks, getTask } from "../services/TaskService";
@@ -51,15 +51,31 @@ const TaskListScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
-            <TouchableOpacity 
-                style={styles.addButton}
-                onPress={() => {
-                    navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
-                }}
-            >
-                <Text style={styles.addButtonText}>+</Text>
-            </TouchableOpacity>
+            {tasks.length === 0 ? (
+                <View style={styles.emptyTasksContainer}>
+                    <Text style={styles.emptyTasksText}>You have no tasks!</Text>
+                    <TouchableOpacity
+                        style={styles.addButtonRectangle}
+                        onPress={() => {
+                            navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                        }}
+                    >
+                        <Text style={styles.addButtonRectangleText}>Click here to add a new one</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                <>
+                    <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
+                    <TouchableOpacity 
+                        style={styles.addButtonCircle}
+                        onPress={() => {
+                            navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                        }}
+                    >
+                        <Text style={styles.addButtonCircleText}>+</Text>
+                    </TouchableOpacity>
+                </>
+            )}
         </SafeAreaView>
     )
 }
@@ -70,12 +86,34 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#fff',
     },
+    emptyTasksContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    emptyTasksText: {
+        fontSize: 18,
+        color: '#555',
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
     },
-    addButton: {
+    addButtonRectangle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#ffefef',
+        borderColor: '#000',
+        borderRadius: 12,
+        margin: 12,
+        padding: 12,
+    },
+    addButtonRectangleText: {
+        fontSize: 20,
+        color: '#009900',
+    },
+    addButtonCircle: {
         position: 'absolute',
         bottom: 24,
         right: 24,
@@ -86,7 +124,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    addButtonText: {
+    addButtonCircleText: {
         color: '#fff',
         fontSize: 36,
         fontWeight: 'bold',
