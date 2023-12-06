@@ -21,9 +21,17 @@ const TaskListScreen = ({ navigation }) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
     }
 
+    const handleToggleTask = (taskId) => {
+        setTasks((prevTasks) =>
+            prevTasks.map((task) =>
+                task.id === taskId ? { ...task, completed: !task.completed } : task
+            )
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} />
+            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} />
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() => {
