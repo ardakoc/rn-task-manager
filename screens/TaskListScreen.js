@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
 import { addTask, deleteTask, getTasks, completeTask } from "../services/TaskService";
@@ -10,18 +10,22 @@ LogBox.ignoreLogs([
 
 const TaskListScreen = ({ navigation }) => {
     const [tasks, setTasks] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchTasks = async () => {
             const tasksData = await getTasks()
             setTasks(tasksData)
+            setLoading(false)
         }
         fetchTasks()
-    }, [navigation])
+    }, [])
 
     const handleAddTask = async (newTask) => {
+        setLoading(true)
         const addedTask = await addTask(newTask)
         setTasks((prevTasks) => [...prevTasks, addedTask])
+        setLoading(false)
     }
 
     const handleDeleteTask = async (taskId) => {
@@ -42,16 +46,20 @@ const TaskListScreen = ({ navigation }) => {
         const task = tasks.find((t) => t.id === taskId)
         navigation.navigate('Task Details', { 
             taskId,
-            onUpdateTask: () => {
-                const tasksData = getTasks()
+            onUpdateTask: async () => {
+                setLoading(true)
+                const tasksData = await getTasks()
                 setTasks(tasksData)
+                setLoading(false)
             }
         })
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            {tasks.length === 0 ? (
+            {loading ? (
+                <ActivityIndicator style={styles.loading} size='large' color='#000' />
+            ) : tasks.length === 0 ? (
                 <View style={styles.emptyTasksContainer}>
                     <Text style={styles.emptyTasksText}>You have no tasks!</Text>
                     <TouchableOpacity
@@ -85,6 +93,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: '#fff',
+    },
+    loading : {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     emptyTasksContainer: {
         flex: 1,
