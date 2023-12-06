@@ -29,9 +29,14 @@ const TaskListScreen = ({ navigation }) => {
         )
     }
 
+    const handleTaskDetails = (taskId) => {
+        const task = tasks.find((t) => t.id === taskId)
+        navigation.navigate('Task Details', { task })
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} />
+            <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
             <TouchableOpacity 
                 style={styles.addButton}
                 onPress={() => {

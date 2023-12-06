@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const TaskList = ({ tasks, onDeleteTask, onToggleTask }) => {
+const TaskList = ({ tasks, onDeleteTask, onToggleTask, onTaskDetails }) => {
     return (
         <FlatList
             data={tasks}
@@ -11,7 +11,9 @@ const TaskList = ({ tasks, onDeleteTask, onToggleTask }) => {
                     <TouchableOpacity onPress={() => onToggleTask(item.id)}>
                         <Text style={item.completed ? styles.completedText : null}>{item.title}</Text>
                     </TouchableOpacity>
-                    {/* <Text>{item.title}</Text> */}
+                    <TouchableOpacity onPress={() => onTaskDetails(item.id)}>
+                        <Text style={styles.detailsButtonText}>Details</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => onDeleteTask(item.id)}>
                         <Text style={styles.deleteButtonText}>Delete</Text>
                     </TouchableOpacity>
@@ -43,7 +45,11 @@ const styles = StyleSheet.create({
     completedText: {
         textDecorationLine: 'line-through',
         color: '#aaa',
-    }
+    },
+    detailsButtonText: {
+      color: '#3498db',
+      marginLeft: 8,
+    },
 })
 
 export default TaskList
