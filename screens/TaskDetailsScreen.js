@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { getTask, updateTask } from "../services/TaskService";
 
 const TaskDetailsScreen = ({ route, navigation }) => {
-    const { task } = route.params
-    const [editedTask, setEditedTask] = useState({ ...task })
+    const { taskId, onUpdateTask } = route.params
+    const [editedTask, setEditedTask] = useState({ id: '', title: '', details: '' })
 
-    const handleSaveChanges = () => {
-        // TODO: implement this function
-        // with an api call or db update.
-        // currently just console.log edited task:
-        console.log('updated task:', editedTask)
+    useEffect(() => {
+        const fetchTaskDetails = async () => {
+            const taskDetails = await getTask(taskId)
+            if (taskDetails) {
+                setEditedTask(taskDetails)
+            }
+        }
+        fetchTaskDetails()
+    }, [taskId])
+
+    const handleSaveChanges = async () => {
+        await updateTask(editedTask.id, editedTask)
+        onUpdateTask(editedTask)
+        navigation.goBack()
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* <Text style={styles.title}>{task.title}</Text>
-            <Text style={styles.details}>{task.details}</Text> */}
-            {/* <Text style={styles.title}>Task Details</Text> */}
             <View style={styles.formElement}>
                 <Text style={styles.label}>Title:</Text>
                 <TextInput
@@ -33,7 +40,6 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                     onChangeText={(text) => setEditedTask({ ...editedTask, details: text })}
                 />
             </View>
-            {/* İsterseniz daha fazla detay ekleyebilirsiniz, örneğin tamamlanacak tarih, öncelik, vb. */}
             <Button title="Save Changes" onPress={handleSaveChanges} />
         </SafeAreaView>
     )

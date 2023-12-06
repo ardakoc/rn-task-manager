@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
-import { addTask, deleteTask, getTasks } from "../services/TaskService";
+import { addTask, deleteTask, getTasks, getTask } from "../services/TaskService";
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -17,7 +17,7 @@ const TaskListScreen = ({ navigation }) => {
             setTasks(tasksData)
         }
         fetchTasks()
-    }, [])
+    }, [navigation])
 
     const handleAddTask = async (newTask) => {
         const addedTask = await addTask(newTask)
@@ -40,7 +40,13 @@ const TaskListScreen = ({ navigation }) => {
 
     const handleTaskDetails = (taskId) => {
         const task = tasks.find((t) => t.id === taskId)
-        navigation.navigate('Task Details', { task })
+        navigation.navigate('Task Details', { 
+            taskId,
+            onUpdateTask: () => {
+                const tasksData = getTasks()
+                setTasks(tasksData)
+            }
+        })
     }
 
     return (
