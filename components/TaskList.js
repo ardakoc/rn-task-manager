@@ -9,7 +9,7 @@ const TaskList = ({ tasks, onDeleteTask, onToggleTask, onTaskDetails }) => {
             renderItem={({ item }) => (
                 <View style={styles.taskItem}>
                     <View style={styles.taskItemTitle}>
-                        <TouchableOpacity onPress={() => onToggleTask(item.id)}>
+                        <TouchableOpacity onPress={() => onToggleTask(item.id, item.completed)}>
                             <Text style={item.completed ? styles.completedText : null}>{item.title}</Text>
                         </TouchableOpacity>
                     </View>
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TaskList
+export default TaskList;
