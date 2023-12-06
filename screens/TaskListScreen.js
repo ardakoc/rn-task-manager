@@ -1,27 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
+import { addTask, deleteTask, getTasks } from "../services/TaskService";
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
 const TaskListScreen = ({ navigation }) => {
-    const [tasks, setTasks] = useState([
-        { id: 1, title: 'Learn React Native' },
-        { id: 2, title: 'Develop an app with React Native' },
-    ])
+    const [tasks, setTasks] = useState([])
 
-    const handleAddTask = (newTask) => {
-        setTasks((prevTasks) => [...prevTasks, newTask])
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const tasksData = await getTasks()
+            setTasks(tasksData)
+        }
+        fetchTasks()
+    }, [])
+
+    const handleAddTask = async (newTask) => {
+        const addedTask = await addTask(newTask)
+        setTasks((prevTasks) => [...prevTasks, addedTask])
     }
 
-    const handleDeleteTask = (taskId) => {
+    const handleDeleteTask = async (taskId) => {
+        await deleteTask(taskId)
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
     }
 
-    const handleToggleTask = (taskId) => {
+    const handleToggleTask = async (taskId, isCompleted) => {
+        await completeTask(taskId, !isCompleted)
         setTasks((prevTasks) =>
             prevTasks.map((task) =>
                 task.id === taskId ? { ...task, completed: !task.completed } : task
