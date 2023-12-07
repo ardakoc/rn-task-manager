@@ -128,9 +128,9 @@ const styles = StyleSheet.create({
     },
     addButtonCircle: {
         position: 'absolute',
-        bottom: 24,
-        right: 24,
-        backgroundColor: '#4caf50',
+        bottom: 48,
+        right: 40,
+        backgroundColor: '#000',
         borderRadius: 50,
         width: 64,
         height: 64,
