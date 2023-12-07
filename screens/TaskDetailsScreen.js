@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import RNPickerSelect from 'react-native-picker-select';
+import { getCategories } from "../services/CategoryService";
 import { getTask, updateTask } from "../services/TaskService";
 
 const TaskDetailsScreen = ({ route, navigation }) => {
     const { taskId, onUpdateTask } = route.params
-    const [editedTask, setEditedTask] = useState({ id: '', title: '', details: '' })
+    const [categories, setCategories] = useState([]);
+    const [editedTask, setEditedTask] = useState({ id: '', title: '', details: '', category: '' })
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -16,7 +19,14 @@ const TaskDetailsScreen = ({ route, navigation }) => {
             }
             setLoading(false)
         }
+        const fetchCategories = async () => {
+            setLoading(true)
+            const categoriesData = await getCategories()
+            setCategories(categoriesData)
+            setLoading(false)
+        }
         fetchTaskDetails()
+        fetchCategories()
     }, [taskId])
 
     const handleSaveChanges = async () => {
@@ -45,6 +55,21 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                             style={styles.input}
                             value={editedTask.details}
                             onChangeText={(text) => setEditedTask({ ...editedTask, details: text })}
+                        />
+                    </View>
+                    <View style={styles.formElement}>
+                        <Text style={styles.label}>Category:</Text>
+                        <RNPickerSelect
+                            value={editedTask.category}
+                            onValueChange={(value) => setEditedTask({ ...editedTask, category: value})}
+                            items={categories.map((category) => ({ label: category, value: category }))}
+                            style={{
+                                ...pickerSelectStyles,
+                                iconContainer: {
+                                    top: 10,
+                                    right: 12,
+                                },
+                            }}
                         />
                     </View>
                     <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>
@@ -78,7 +103,6 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         borderColor: '#777',
-        color: '#777',
         borderWidth: 1,
         paddingHorizontal: 16,
     },
@@ -94,6 +118,27 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 16,
         color: '#fff',
+    },
+})
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 14,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderWidth: 1,
+        borderColor: '#000',
+        color: '#000',
+        paddingRight: 30,
+    },
+    inputAndroid: {
+        fontSize: 14,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        color: '#000',
+        paddingRight: 30,
     },
 })
 
