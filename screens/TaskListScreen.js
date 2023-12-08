@@ -1,25 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import RNPickerSelect from 'react-native-picker-select';
 import TaskList from "../components/TaskList";
 import { LogBox } from "react-native";
 import { addTask, deleteTask, getTasks, completeTask } from "../services/TaskService";
+import { getCategories } from '../services/CategoryService';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
 const TaskListScreen = ({ navigation }) => {
+    const [allTasks, setAllTasks] = useState([])
     const [tasks, setTasks] = useState([])
+    const [categories, setCategories] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const fetchTasks = async () => {
+        const fetchAllTasks = async () => {
             const tasksData = await getTasks()
-            setTasks(tasksData)
-            setLoading(false)
+            setAllTasks(tasksData)
         }
-        fetchTasks()
-    }, [])
+        const fetchCategories = async () => {
+            const categoriesData = await getCategories()
+            setCategories(categoriesData)
+        }
+        const filterTasksByCategory = async () => {
+            const filteredTasks = selectedCategory
+                ? await getTasks({ category: selectedCategory })
+                : await getTasks({})
+            setTasks(filteredTasks)
+        }
+        const fetchData = async () => {
+            setLoading(true);
+            await fetchAllTasks();
+            await fetchCategories();
+            await filterTasksByCategory();
+            setLoading(false);
+        }
+        fetchData()
+    }, [selectedCategory])
 
     const handleAddTask = async (newTask) => {
         setLoading(true)
@@ -59,7 +80,7 @@ const TaskListScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             {loading ? (
                 <ActivityIndicator style={styles.loading} size='large' color='#000' />
-            ) : tasks.length === 0 ? (
+            ) : allTasks.length === 0 ? (
                 <View style={styles.emptyTasksContainer}>
                     <Text style={styles.emptyTasksText}>You have no tasks!</Text>
                     <TouchableOpacity
@@ -73,6 +94,20 @@ const TaskListScreen = ({ navigation }) => {
                 </View>
             ) : (
                 <>
+                    <View style={styles.filterContainer}>
+                        <Text style={styles.filterLabel}>Filter by Category:</Text>
+                        <RNPickerSelect 
+                            onValueChange={(value) => setSelectedCategory(value)}
+                            items={categories.map((category) => ({ label: category, value: category }))}
+                            style={pickerSelectStyles}
+                            placeholder={{
+                                label: 'Select a category',
+                                value: null,
+                                color: '#777',
+                            }}
+                            value={selectedCategory}
+                        />
+                    </View>
                     <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
                     <TouchableOpacity 
                         style={styles.addButtonCircle}
@@ -141,6 +176,27 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 36,
         fontWeight: 'bold',
+    },
+})
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 14,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderWidth: 1,
+        borderColor: '#000',
+        color: '#000',
+        paddingRight: 30,
+    },
+    inputAndroid: {
+        fontSize: 14,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderWidth: 0.5,
+        borderColor: '#000',
+        color: '#000',
+        paddingRight: 30,
     },
 })
 

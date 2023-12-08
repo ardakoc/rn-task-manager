@@ -2,8 +2,12 @@ import { db } from './firebase';
 
 const tasksCollection = db.collection('tasks');
 
-export const getTasks = async () => {
-    const snapshot = await tasksCollection.get();
+export const getTasks = async (filter = {}) => {
+    let query = tasksCollection
+    if (filter.category) {
+        query = query.where('category', '==', filter.category)
+    }
+    const snapshot = await query.get();
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
