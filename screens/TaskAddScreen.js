@@ -58,15 +58,11 @@ const TaskAddScreen = ({ route, navigation }) => {
                     items={categories.map((category) => ({ label: category, value: category }))}
                     style={pickerSelectStyles}
                     useNativeAndroidPickerStyle={false}
-                    value={category}
+                    value={category}                    
                 >
-                    {category ? (
+                    {category && (
                         <View style={pickerSelectStyles}>
                             <Text style={pickerSelectStyles.inputIOS}>{category}</Text>
-                        </View>
-                    ) : (
-                        <View style={styles.input}>
-                            <Text style={pickerSelectStyles.inputIOS}>Select a category</Text>
                         </View>
                     )}
                 </RNPickerSelect>
