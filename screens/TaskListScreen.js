@@ -15,11 +15,12 @@ const TaskListScreen = ({ navigation }) => {
     const [tasks, setTasks] = useState([])
     const [categories, setCategories] = useState([])
     const [selectedCategory, setSelectedCategory] = useState(null)
+    const [sortBy, setSortBy] = useState('oldToNew')
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchAllTasks = async () => {
-            const tasksData = await getTasks()
+            const tasksData = await getTasks({ sortBy });
             setAllTasks(tasksData)
         }
         const fetchCategories = async () => {
@@ -28,8 +29,8 @@ const TaskListScreen = ({ navigation }) => {
         }
         const filterTasksByCategory = async () => {
             const filteredTasks = selectedCategory
-                ? await getTasks({ category: selectedCategory })
-                : await getTasks({})
+                ? await getTasks({ category: selectedCategory, sortBy })
+                : await getTasks({ sortBy })
             setTasks(filteredTasks)
         }
         const fetchData = async () => {
@@ -40,18 +41,22 @@ const TaskListScreen = ({ navigation }) => {
             setLoading(false);
         }
         fetchData()
-    }, [selectedCategory])
+    }, [selectedCategory, sortBy])
 
     const handleAddTask = async (newTask) => {
         setLoading(true)
         const addedTask = await addTask(newTask)
         setTasks((prevTasks) => [...prevTasks, addedTask])
+        const tasksData = await getTasks({ sortBy })
+        setAllTasks(tasksData)
         setLoading(false)
     }
 
     const handleDeleteTask = async (taskId) => {
         await deleteTask(taskId)
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
+        const tasksData = await getTasks({ sortBy })
+        setAllTasks(tasksData)
     }
 
     const handleToggleTask = async (taskId, isCompleted) => {
@@ -76,6 +81,10 @@ const TaskListScreen = ({ navigation }) => {
         })
     }
 
+    const handleSortChange = () => {
+        setSortBy(sortBy === 'oldToNew' ? 'newToOld' : 'oldToNew');
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             {loading ? (
@@ -86,7 +95,7 @@ const TaskListScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.addButtonRectangle}
                         onPress={() => {
-                            navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                            navigation.navigate('Add Task', { onAddTask: handleAddTask, allTasks, setTasks })
                         }}
                     >
                         <Text style={styles.addButtonRectangleText}>Click here to add a new one</Text>
@@ -108,6 +117,11 @@ const TaskListScreen = ({ navigation }) => {
                             value={selectedCategory}
                         />
                     </View>
+                    <TouchableOpacity style={styles.sortButton} onPress={handleSortChange}>
+                        <Text style={styles.sortButtonText}>
+                            {sortBy === 'oldToNew' ? 'Sort: Old to New' : 'Sort: New to Old'}
+                        </Text>
+                    </TouchableOpacity>
                     <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
                     <TouchableOpacity 
                         style={styles.addButtonCircle}
@@ -175,6 +189,16 @@ const styles = StyleSheet.create({
     addButtonCircleText: {
         color: '#fff',
         fontSize: 36,
+        fontWeight: 'bold',
+    },
+    sortButton: {
+        // marginTop: 10,
+        padding: 14,
+        backgroundColor: '#3498db',
+        alignItems: 'center',
+    },
+    sortButtonText: {
+        color: '#fff',
         fontWeight: 'bold',
     },
 })

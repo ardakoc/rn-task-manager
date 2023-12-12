@@ -25,9 +25,9 @@ const TaskAddScreen = ({ route, navigation }) => {
             details: taskDetails,
             completed: false,
             category: selectedCategory,
+            created_on: new Date(),
         }
         onAddTask(newTask)
-        setCategories([...categories]);
         navigation.goBack()
     }
 

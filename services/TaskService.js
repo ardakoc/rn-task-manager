@@ -2,10 +2,16 @@ import { db } from './firebase';
 
 const tasksCollection = db.collection('tasks');
 
-export const getTasks = async (filter = {}) => {
+export const getTasks = async ({ category, sortBy } = {}) => {
     let query = tasksCollection
-    if (filter.category) {
-        query = query.where('category', '==', filter.category)
+    if (category) {
+        query = query.where('category', '==', category)
+    }
+    if (sortBy === 'oldToNew') {
+        query = query.orderBy('created_on', 'asc')
+    }
+    else {
+        query = query.orderBy('created_on', 'desc')
     }
     const snapshot = await query.get();
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
