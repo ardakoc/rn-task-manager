@@ -46,7 +46,9 @@ const TaskListScreen = ({ navigation }) => {
     const handleAddTask = async (newTask) => {
         setLoading(true)
         const addedTask = await addTask(newTask)
-        setTasks((prevTasks) => sortBy === 'oldToNew' ? [...prevTasks, addedTask] : [addedTask, ...prevTasks])
+        selectedCategory != null & selectedCategory != addedTask.category
+            ? setTasks((prevTasks) => [...prevTasks])
+            : setTasks((prevTasks) => sortBy === 'oldToNew' ? [...prevTasks, addedTask] : [addedTask, ...prevTasks])
         const tasksData = await getTasks({ sortBy })
         setAllTasks(tasksData)
         setLoading(false)
