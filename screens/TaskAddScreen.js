@@ -4,11 +4,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import { getCategories } from '../services/CategoryService';
 
 const TaskAddScreen = ({ route, navigation }) => {
-    const { onAddTask } = route.params
+    const { onAddTask, selectedCategory } = route.params
 
     const [taskTitle, setTaskTitle] = useState('')
     const [taskDetails, setTaskDetails] = useState('')
-    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [category, setCategory] = useState(selectedCategory)
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const TaskAddScreen = ({ route, navigation }) => {
             title: taskTitle,
             details: taskDetails,
             completed: false,
-            category: selectedCategory,
+            category: category,
             created_on: new Date(),
         }
         onAddTask(newTask)
@@ -54,21 +54,22 @@ const TaskAddScreen = ({ route, navigation }) => {
             <View style={styles.formElement}>
                 <Text style={styles.label}>Category:</Text>
                 <RNPickerSelect
-                    onValueChange={(value) => setSelectedCategory(value)}
+                    onValueChange={(value) => setCategory(value)}
                     items={categories.map((category) => ({ label: category, value: category }))}
-                    style={{
-                        ...pickerSelectStyles,
-                        iconContainer: {
-                            top: 10,
-                            right: 12,
-                        },
-                    }}
-                    placeholder={{
-                        label: 'Select a category',
-                        value: null,
-                        color: '#777',
-                    }}
-                />
+                    style={pickerSelectStyles}
+                    useNativeAndroidPickerStyle={false}
+                    value={category}
+                >
+                    {category ? (
+                        <View style={pickerSelectStyles}>
+                            <Text style={pickerSelectStyles.inputIOS}>{category}</Text>
+                        </View>
+                    ) : (
+                        <View style={styles.input}>
+                            <Text style={pickerSelectStyles.inputIOS}>Select a category</Text>
+                        </View>
+                    )}
+                </RNPickerSelect>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleAddTask}>
                 <Text style={styles.buttonText}>Add Task</Text>

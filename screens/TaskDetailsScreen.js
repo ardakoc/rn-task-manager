@@ -63,13 +63,7 @@ const TaskDetailsScreen = ({ route, navigation }) => {
                             value={editedTask.category}
                             onValueChange={(value) => setEditedTask({ ...editedTask, category: value})}
                             items={categories.map((category) => ({ label: category, value: category }))}
-                            style={{
-                                ...pickerSelectStyles,
-                                iconContainer: {
-                                    top: 10,
-                                    right: 12,
-                                },
-                            }}
+                            style={pickerSelectStyles}
                         />
                     </View>
                     <TouchableOpacity style={styles.button} onPress={handleSaveChanges}>

@@ -126,7 +126,7 @@ const TaskListScreen = ({ navigation }) => {
                     <TouchableOpacity 
                         style={styles.addButtonCircle}
                         onPress={() => {
-                            navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks })
+                            navigation.navigate('Add Task', { onAddTask: handleAddTask, tasks, setTasks, selectedCategory })
                         }}
                     >
                         <Text style={styles.addButtonCircleText}>+</Text>
