@@ -8,9 +8,9 @@ const TaskList = ({ tasks, onDeleteTask, onToggleTask, onTaskDetails }) => {
             keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
             renderItem={({ item }) => (
                 <View style={styles.taskItem}>
-                    <View style={styles.taskItemTitle}>
+                    <View style={styles.taskTitleContainer}>
                         <TouchableOpacity onPress={() => onToggleTask(item.id, item.completed)}>
-                            <Text style={item.completed ? styles.completedText : null}>{item.title}</Text>
+                            <Text style={item.completed ? styles.completedTaskTitle : styles.taskTitle}>{item.title}</Text>
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => onTaskDetails(item.id)}>
@@ -34,8 +34,19 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
-    taskItemTitle: {
+    taskTitleContainer: {
         width: '60%',
+    },
+    taskTitle: {
+        fontWeight: 'bold',
+    },
+    completedTaskTitle: {
+        textDecorationLine: 'line-through',
+        color: '#aaa',
+    },
+    detailsButtonText: {
+      color: '#3498db',
+      marginLeft: 8,
     },
     deleteButtonText: {
         flex: 1,
@@ -46,14 +57,6 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 20,
         height: '100%',
-    },
-    completedText: {
-        textDecorationLine: 'line-through',
-        color: '#aaa',
-    },
-    detailsButtonText: {
-      color: '#3498db',
-      marginLeft: 8,
     },
 })
 

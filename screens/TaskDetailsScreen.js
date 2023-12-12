@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#000',
-        borderRadius: 12,
         marginTop: 40,
         marginHorizontal: 136,
         padding: 16,
@@ -127,8 +126,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderWidth: 1,
-        borderColor: '#000',
-        color: '#000',
+        borderColor: '#777',
         paddingRight: 30,
     },
     inputAndroid: {
@@ -136,8 +134,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 10,
         borderWidth: 0.5,
-        borderColor: '#000',
-        color: '#000',
+        borderColor: '#777',
         paddingRight: 30,
     },
 })

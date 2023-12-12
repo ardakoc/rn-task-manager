@@ -46,7 +46,7 @@ const TaskListScreen = ({ navigation }) => {
     const handleAddTask = async (newTask) => {
         setLoading(true)
         const addedTask = await addTask(newTask)
-        setTasks((prevTasks) => [...prevTasks, addedTask])
+        setTasks((prevTasks) => sortBy === 'oldToNew' ? [...prevTasks, addedTask] : [addedTask, ...prevTasks])
         const tasksData = await getTasks({ sortBy })
         setAllTasks(tasksData)
         setLoading(false)
@@ -103,25 +103,25 @@ const TaskListScreen = ({ navigation }) => {
                 </View>
             ) : (
                 <>
-                    <View style={styles.filterContainer}>
-                        <Text style={styles.filterLabel}>Filter by Category:</Text>
-                        <RNPickerSelect 
-                            onValueChange={(value) => setSelectedCategory(value)}
-                            items={categories.map((category) => ({ label: category, value: category }))}
-                            style={pickerSelectStyles}
-                            placeholder={{
-                                label: 'Select a category',
-                                value: null,
-                                color: '#777',
-                            }}
-                            value={selectedCategory}
-                        />
+                    <View style={styles.buttonsContainer}>
+                        <View style={styles.filterContainer}>
+                            <RNPickerSelect 
+                                onValueChange={(value) => setSelectedCategory(value)}
+                                items={categories.map((category) => ({ label: category, value: category }))}
+                                style={pickerSelectStyles}
+                                placeholder={{
+                                    label: 'All Tasks',
+                                    value: null,
+                                }}
+                                value={selectedCategory}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.sortButton} onPress={handleSortChange}>
+                            <Text style={styles.sortButtonText}>
+                                {sortBy === 'oldToNew' ? 'Sort: Old to New' : 'Sort: New to Old'}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.sortButton} onPress={handleSortChange}>
-                        <Text style={styles.sortButtonText}>
-                            {sortBy === 'oldToNew' ? 'Sort: Old to New' : 'Sort: New to Old'}
-                        </Text>
-                    </TouchableOpacity>
                     <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} onTaskDetails={handleTaskDetails} />
                     <TouchableOpacity 
                         style={styles.addButtonCircle}
@@ -157,17 +157,29 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#555',
     },
-    title: {
-        fontSize: 24,
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    filterContainer: {
+        flex: 1,
+    },
+    sortButton: {
+        flex: 1,
+        backgroundColor: '#3498db',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    sortButtonText: {
+        color: '#fff',
         fontWeight: 'bold',
-        marginBottom: 16,
     },
     addButtonRectangle: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#ffefef',
         borderColor: '#000',
-        borderRadius: 12,
+        // borderRadius: 12,
         margin: 12,
         padding: 12,
     },
@@ -191,36 +203,28 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: 'bold',
     },
-    sortButton: {
-        // marginTop: 10,
-        padding: 14,
-        backgroundColor: '#3498db',
-        alignItems: 'center',
-    },
-    sortButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
 })
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 14,
-        paddingVertical: 12,
+        paddingVertical: 14,
         paddingHorizontal: 16,
-        borderWidth: 1,
-        borderColor: '#000',
+        backgroundColor: '#fff',
         color: '#000',
+        fontWeight: 'bold',
         paddingRight: 30,
+        textAlign: 'center',
     },
     inputAndroid: {
         fontSize: 14,
+        paddingVertical: 14,
         paddingHorizontal: 16,
-        paddingVertical: 10,
         borderWidth: 0.5,
         borderColor: '#000',
         color: '#000',
         paddingRight: 30,
+        textAlign: 'center',
     },
 })
 
