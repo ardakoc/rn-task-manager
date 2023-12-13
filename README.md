@@ -16,10 +16,10 @@ A simple task management app developed with React Native.
 - `components/`: Application components.
 
 ## Ekran Görüntüleri
-<img src="assets/screenshots/screenshot_1.PNG" width="190" alt="Screenshot 1"><img src="assets/screenshots/screenshot_2.PNG" width="190" alt="Screenshot 2">
-<img src="assets/screenshots/screenshot_3.PNG" width="190" alt="Screenshot 3">
-<img src="assets/screenshots/screenshot_4.PNG" width="190" alt="Screenshot 4">
-<img src="assets/screenshots/screenshot_5.PNG" width="190" alt="Screenshot 5">
+<img src="assets/screenshots/screenshot_1.PNG" width="220" alt="Screenshot 1"><img src="assets/screenshots/screenshot_2.PNG" width="220" alt="Screenshot 2">
+<img src="assets/screenshots/screenshot_3.PNG" width="220" alt="Screenshot 3">
+<img src="assets/screenshots/screenshot_4.PNG" width="220" alt="Screenshot 4">
+<img src="assets/screenshots/screenshot_5.PNG" width="220" alt="Screenshot 5">
 
 ## Develop and Contribute
 1. Fork.
